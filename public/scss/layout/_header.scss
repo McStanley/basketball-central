@@ -1,0 +1,28 @@
+@use '../utils' as *;
+
+.header {
+  text-align: center;
+  font-size: 1.15rem;
+  margin-bottom: 40px;
+
+  ul {
+    @include above-breakpoint {
+      display: flex;
+      gap: 15px;
+    }
+
+    li:not(:first-of-type) {
+      margin-top: 8px;
+
+      @include above-breakpoint {
+        margin-top: unset;
+      }
+    }
+
+    a {
+      &:hover {
+        text-decoration: underline 2px;
+      }
+    }
+  }
+}

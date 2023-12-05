@@ -1,0 +1,15 @@
+.main {
+  a {
+    &::before {
+      content: '➤ ';
+      visibility: hidden;
+    }
+
+    &:hover,
+    &:focus {
+      &::before {
+        visibility: visible;
+      }
+    }
+  }
+}

@@ -5,5 +5,30 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title= title
     link(rel='stylesheet', href='/css/style.css')
+    link(rel='preconnect', href='https://fonts.googleapis.com')
+    link(rel='preconnect', href='https://fonts.gstatic.com', crossorigin)
+    link(
+      href='https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap',
+      rel='stylesheet'
+    )
   body
-    block content
+    header.header
+      nav
+        ul
+          li
+            a(href='/') Home
+          li
+            a(href='/teams') Teams
+          li
+            a(href='/players') Players
+          li
+            a(href='/teams/new') Add team
+          li
+            a(href='/players/new') Add player
+    main.main
+      block content
+    footer.footer
+      p
+        | 🚀 2023
+        |
+        a.external(href='https://github.com/McStanley', target='_blank') Stanisław Olejniczak

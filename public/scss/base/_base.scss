@@ -1,0 +1,23 @@
+body {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 20px 10px;
+  font-family: 'Lato', sans-serif;
+}
+
+a {
+  color: #023e8a;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+
+  &.external {
+    &::after {
+      content: ' ↗';
+      position: relative;
+      bottom: 4px;
+    }
+  }
+}
