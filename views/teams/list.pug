@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  h1= title
+  ul.entry-list
+    each team in teams 
+      li
+        h2 #[a(href=team.url) #{ team.name }]
+        p #[b Location:] #{ team.location }
+        p #[b Established:] #{ team.established_year } 

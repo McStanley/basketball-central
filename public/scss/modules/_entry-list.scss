@@ -1,0 +1,21 @@
+@use '../utils' as *;
+
+.entry-list {
+  h2,
+  h3 {
+    margin-block: 0.5em;
+  }
+
+  li {
+    &:not(:first-child) {
+      margin-top: 20px;
+    }
+
+    padding-block: 5px;
+    padding-left: 10px;
+    border-left: 2px solid rgba($blue, 0.7);
+    $radius: 10px;
+    border-top-left-radius: $radius;
+    border-bottom-left-radius: $radius;
+  }
+}

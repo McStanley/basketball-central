@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  h1= title
+  p #[b Location:] #{ team.location }
+  p #[b Established:] #{ team.established_year }
+  h2 Players
+  ul.entry-list
+    each player in players
+      li
+        .player-headline
+          h3 #[a(href=player.url) #{ player.full_name }] 
+          p ##{ player.number }
+        p #[b Position:] #{ player.position_name }

@@ -1,0 +1,9 @@
+.player-headline {
+  display: flex;
+  align-items: baseline;
+  column-gap: 8px;
+
+  p {
+    margin-block: 0;
+  }
+}
