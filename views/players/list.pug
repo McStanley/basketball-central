@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+  h1= title
+  ul.entry-list
+    each player in players 
+      li
+        .player-headline
+          h2 #[a(href=player.url) #{ player.full_name }]
+          p ##{ player.number }
+        p #[b Team:] #{ player.team ? player.team.name : 'Free Agent' }
+        p #[b Position:] #{ player.position_name }

@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  .player-headline
+    h1= title
+    p ##{ player.number }
+  h2
+    if player.team
+      a.omit-before(href=player.team.url) #{ player.team.name }
+    else
+      | Free Agent
+  h3(style='margin-top: 50px') Player information:
+  p #[b Position:] #{ player.position_name }
+  p #[b Height:] #{ player.height } cm
+  p #[b Weight:] #{ player.weight } kg
+  p #[b Country:] #{ player.country }
+  p #[b Age:] #{ player.age }
