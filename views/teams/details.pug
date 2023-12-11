@@ -2,6 +2,9 @@ extends ../layout
 
 block content
   h1= title
+  .actions
+    a(href=`${team.url}/update`) Edit
+    a(href=`${team.url}/delete`) Delete
   p #[b Location:] #{ team.location }
   p #[b Established:] #{ team.established_year }
   h2 Players

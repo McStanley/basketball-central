@@ -14,12 +14,12 @@ const checkTeam = asyncHandler(async (req, res, next) => {
       .isLength({ max: 30 })
       .withMessage('Name cannot be longer than 30 characters')
       .custom(async (value) => {
-        const existingTeam = await Team.find({ name: value }).collation({
+        const [existingTeam] = await Team.find({ name: value }).collation({
           locale: 'en',
           strength: 2,
         });
 
-        if (existingTeam.length) {
+        if (existingTeam && existingTeam._id.toString() !== req.params.id) {
           throw new Error('Team with this name already exists');
         }
       }),

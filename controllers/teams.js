@@ -75,3 +75,62 @@ exports.create_POST = [
     res.redirect(newTeam.url);
   }),
 ];
+
+exports.update_GET = asyncHandler(async (req, res, next) => {
+  const team = await Team.findById(req.params.id);
+
+  if (!team) {
+    const error = new Error('Team not found');
+    error.status = 404;
+    next(error);
+    return;
+  }
+
+  res.render('teams/form', {
+    title: `Update ${team.name}`,
+    name: team.name,
+    location: team.location,
+    established: team.established_year,
+    url: team.url,
+  });
+});
+
+exports.update_POST = [
+  checkTeam,
+  asyncHandler(async (req, res, next) => {
+    const team = await Team.findById(req.params.id);
+
+    if (!team) {
+      const error = new Error('Team not found');
+      error.status = 404;
+      next(error);
+      return;
+    }
+
+    const result = validationResult(req);
+    const { name, location, established } = matchedData(req, {
+      onlyValidData: false,
+    });
+
+    if (!result.isEmpty()) {
+      res.render('teams/form', {
+        title: `Update ${team.name}`,
+        name,
+        location,
+        established,
+        url: team.url,
+        errors: result.array(),
+      });
+
+      return;
+    }
+
+    await team.updateOne({
+      name,
+      location,
+      established_year: established,
+    });
+
+    res.redirect(team.url);
+  }),
+];
