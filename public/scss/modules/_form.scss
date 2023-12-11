@@ -1,0 +1,48 @@
+@use '../utils' as *;
+
+.form {
+  margin-top: 50px;
+
+  .form-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 4px 8px;
+
+    @include above-breakpoint {
+      flex-direction: row;
+      align-items: baseline;
+    }
+
+    &:not(:first-child) {
+      margin-top: 25px;
+    }
+
+    label {
+      font-size: 1.3rem;
+
+      @include above-breakpoint {
+        &::after {
+          content: ':';
+        }
+      }
+    }
+
+    input {
+      font-size: 1.1rem;
+
+      @include above-breakpoint {
+        flex-grow: 1;
+      }
+    }
+
+    &.form-buttons {
+      width: fit-content;
+      margin-inline: auto;
+      flex-direction: row;
+
+      button {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

@@ -5,3 +5,12 @@
     @content;
   }
 }
+
+@mixin container($color: #000) {
+  padding-block: 5px;
+  padding-left: 10px;
+  border-left: 2px solid rgba($color, 0.7);
+  $radius: 10px;
+  border-top-left-radius: $radius;
+  border-bottom-left-radius: $radius;
+}

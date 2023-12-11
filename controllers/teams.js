@@ -1,7 +1,10 @@
 const asyncHandler = require('express-async-handler');
+const { matchedData, validationResult } = require('express-validator');
 
 const Team = require('../models/Team');
 const Player = require('../models/Player');
+
+const checkTeam = require('../validators/checkTeam');
 
 exports.list = asyncHandler(async (req, res, next) => {
   const teams = await Team.find({}).sort({ name: 1 }).exec();
@@ -34,3 +37,41 @@ exports.details = asyncHandler(async (req, res, next) => {
     players,
   });
 });
+
+exports.create_GET = asyncHandler(async (req, res, next) => {
+  res.render('teams/form', {
+    title: 'New team',
+  });
+});
+
+exports.create_POST = [
+  checkTeam,
+  asyncHandler(async (req, res, next) => {
+    const result = validationResult(req);
+    const { name, location, established } = matchedData(req, {
+      onlyValidData: false,
+    });
+
+    if (!result.isEmpty()) {
+      res.render('teams/form', {
+        title: 'New team',
+        name,
+        location,
+        established,
+        errors: result.array(),
+      });
+
+      return;
+    }
+
+    const newTeam = new Team({
+      name,
+      location,
+      established_year: established,
+    });
+
+    await newTeam.save();
+
+    res.redirect(newTeam.url);
+  }),
+];

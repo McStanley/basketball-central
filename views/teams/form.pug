@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+  - const currentYear = new Date().getUTCFullYear().toString();
+
+  h1= title
+  form.form(action='', method='post')
+    .form-entry
+      label(for='team-name') Name
+      input#team-name(
+        type='text',
+        name='name',
+        placeholder='Team name',
+        value=name
+      )
+    .form-entry
+      label(for='team-location') Location
+      input#team-location(
+        type='text',
+        name='location',
+        placeholder='Team location',
+        value=location
+      )
+    .form-entry
+      label(for='team-established') Established
+      input#team-established(
+        type='number',
+        name='established',
+        min='1891',
+        max=currentYear,
+        value=established || currentYear
+      )
+    .form-entry.form-buttons
+      a(href='/teams')
+        button(type='button') Cancel
+      button(type='submit') Submit
+  if errors
+    .errors
+      p.errors-header Errors:
+      ul
+        each error in errors
+          li !{ error.msg }.

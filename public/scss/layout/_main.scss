@@ -1,5 +1,5 @@
 .main {
-  a:not(.omit-before) {
+  a:not(:has(button)):not(.omit-before) {
     &::before {
       content: '➤ ';
       visibility: hidden;
