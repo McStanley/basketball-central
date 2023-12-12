@@ -134,3 +134,60 @@ exports.update_POST = [
     res.redirect(team.url);
   }),
 ];
+
+exports.delete_GET = asyncHandler(async (req, res, next) => {
+  const team = await Team.findById(req.params.id);
+
+  if (!team) {
+    const error = new Error('Team not found');
+    error.status = 404;
+    next(error);
+    return;
+  }
+
+  const playersCount = await Player.countDocuments({ team: team._id });
+
+  res.render('teams/delete', {
+    title: `Delete ${team.name}`,
+    playersCount,
+    url: team.url,
+  });
+});
+
+exports.delete_POST = asyncHandler(async (req, res, next) => {
+  const team = await Team.findById(req.params.id);
+
+  if (!team) {
+    const error = new Error('Team not found');
+    error.status = 404;
+    next(error);
+    return;
+  }
+
+  const playersCount = await Player.countDocuments({ team: team._id });
+
+  if (playersCount) {
+    const { action } = req.body;
+
+    if (!['keep', 'delete'].includes(action)) {
+      res.render('teams/delete', {
+        title: `Delete ${team.name}`,
+        playersCount,
+        url: team.url,
+        errors: [{ msg: 'You need to decide what to do with active players' }],
+      });
+
+      return;
+    }
+
+    if (action === 'keep') {
+      await Player.updateMany({ team: team._id }, { team: null });
+    } else {
+      await Player.deleteMany({ team: team._id });
+    }
+  }
+
+  await team.deleteOne();
+
+  res.redirect('/teams');
+});

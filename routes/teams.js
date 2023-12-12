@@ -11,6 +11,10 @@ router
   .route('/:id/update')
   .get(teamsController.update_GET)
   .post(teamsController.update_POST);
+router
+  .route('/:id/delete')
+  .get(teamsController.delete_GET)
+  .post(teamsController.delete_POST);
 router.get('/:id', teamsController.details);
 router.get('/', teamsController.list);
 

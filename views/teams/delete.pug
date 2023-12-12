@@ -1,0 +1,37 @@
+extends ../layout
+
+mixin buttons
+  .form-entry.form-buttons
+    a(href=url)
+      button(type='button') Cancel
+    button(type='submit') Submit
+
+block content
+  h1= title
+  p Are you sure you want to delete this team?
+  if playersCount > 0
+    form.form(action='', method='post')
+      h2 Warning
+      fieldset
+        legend.
+          This team has #{ playersCount } active
+          #{ playersCount > 1 ? 'players' : 'player' }.
+          What would you like to do with them?
+        div
+          input#action-keep(type='radio', name='action', value='keep')
+          label(for='action-keep') Make them free agents
+        div
+          input#action-delete(type='radio', name='action', value='delete')
+          label(for='action-delete') Delete them
+      +buttons
+  else
+    form.form(action='', method='post')
+      h2 Notice
+      p This team has no active players. It can be safely deleted.
+      +buttons
+  if errors
+    .errors
+      p.errors-header Errors:
+      ul
+        each error in errors
+          li !{ error.msg }.
