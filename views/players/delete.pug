@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  h1= title
+  p Are you sure you want to delete this player?
+  form.form(action='', method='post')
+    .form-entry.form-buttons
+      a(href=url)
+        button(type='button') Cancel
+      button(type='submit') Submit
+  if errors
+    .errors
+      p.errors-header Errors:
+      ul
+        each error in errors
+          li !{ error.msg }.

@@ -211,3 +211,34 @@ exports.update_POST = [
     res.redirect(player.url);
   }),
 ];
+
+exports.delete_GET = asyncHandler(async (req, res, next) => {
+  const player = await Player.findById(req.params.id);
+
+  if (!player) {
+    const error = new Error('Player not found');
+    error.status = 404;
+    next(error);
+    return;
+  }
+
+  res.render('players/delete', {
+    title: `Delete ${player.full_name}`,
+    url: player.url,
+  });
+});
+
+exports.delete_POST = asyncHandler(async (req, res, next) => {
+  const player = await Player.findById(req.params.id);
+
+  if (!player) {
+    const error = new Error('Player not found');
+    error.status = 404;
+    next(error);
+    return;
+  }
+
+  await player.deleteOne();
+
+  res.redirect('/players');
+});

@@ -11,6 +11,10 @@ router
   .route('/:id/update')
   .get(playersController.update_GET)
   .post(playersController.update_POST);
+router
+  .route('/:id/delete')
+  .get(playersController.delete_GET)
+  .post(playersController.delete_POST);
 router.get('/:id', playersController.details);
 router.get('/', playersController.list);
 
