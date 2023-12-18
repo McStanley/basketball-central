@@ -4,7 +4,10 @@ block content
   .player-headline
     h1= title
     p ##{ player.number }
-  h2
+  .actions
+    a(href=`${player.url}/update`) Edit
+    a(href=`${player.url}/delete`) Delete
+  h2(style='margin-top: 25px')
     if player.team
       a.omit-before(href=player.team.url) #{ player.team.name }
     else

@@ -66,7 +66,10 @@ const checkPlayer = asyncHandler(async (req, res, next) => {
             number: value,
           });
 
-          if (conflictingPlayer) {
+          if (
+            conflictingPlayer &&
+            conflictingPlayer._id.toString() !== req.params.id
+          ) {
             throw new Error(
               `This number is taken by ${conflictingPlayer.full_name}`,
             );

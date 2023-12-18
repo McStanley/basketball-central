@@ -7,6 +7,10 @@ router
   .route('/new')
   .get(playersController.create_GET)
   .post(playersController.create_POST);
+router
+  .route('/:id/update')
+  .get(playersController.update_GET)
+  .post(playersController.update_POST);
 router.get('/:id', playersController.details);
 router.get('/', playersController.list);
 
