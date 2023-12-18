@@ -1,6 +1,12 @@
 const asyncHandler = require('express-async-handler');
+const { matchedData, validationResult } = require('express-validator');
 
 const Player = require('../models/Player');
+const Team = require('../models/Team');
+
+const checkPlayer = require('../validators/checkPlayer');
+
+const countries = require('../data/countries.json');
 
 exports.list = asyncHandler(async (req, res, next) => {
   const players = await Player.find({})
@@ -30,3 +36,75 @@ exports.details = asyncHandler(async (req, res, next) => {
     player,
   });
 });
+
+exports.create_GET = asyncHandler(async (req, res, next) => {
+  const teams = await Team.find({})
+    .select({ name: 1 })
+    .sort({ name: 1 })
+    .exec();
+
+  res.render('players/form', {
+    title: 'New player',
+    teams,
+    countries,
+  });
+});
+
+exports.create_POST = [
+  checkPlayer,
+  asyncHandler(async (req, res, next) => {
+    const result = validationResult(req);
+    const {
+      firstName,
+      lastName,
+      team,
+      number,
+      position,
+      height,
+      weight,
+      country,
+      dateOfBirth,
+    } = matchedData(req, { onlyValidData: false });
+
+    if (!result.isEmpty()) {
+      const teams = await Team.find({})
+        .select({ name: 1 })
+        .sort({ name: 1 })
+        .exec();
+
+      res.render('players/form', {
+        title: 'New player',
+        firstName,
+        lastName,
+        teams,
+        selectedTeam: team,
+        number,
+        selectedPosition: position,
+        height,
+        weight,
+        countries,
+        selectedCountry: country,
+        dateOfBirth,
+        errors: result.array(),
+      });
+
+      return;
+    }
+
+    const newPlayer = new Player({
+      first_name: firstName,
+      last_name: lastName,
+      team,
+      number,
+      position,
+      height,
+      weight,
+      country,
+      date_of_birth: dateOfBirth,
+    });
+
+    await newPlayer.save();
+
+    res.redirect(newPlayer.url);
+  }),
+];

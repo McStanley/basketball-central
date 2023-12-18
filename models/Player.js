@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const luxon = require('luxon');
+const countries = require('../data/countries.json');
 
 const { Schema, model } = mongoose;
 
@@ -33,6 +34,12 @@ PlayerSchema.virtual('position_name').get(function getPositionName() {
   };
 
   return positions[this.position];
+});
+
+PlayerSchema.virtual('country_name').get(function getCountryName() {
+  const country = countries.find((entry) => entry.code === this.country);
+
+  return country.name;
 });
 
 PlayerSchema.virtual('age').get(function getAge() {

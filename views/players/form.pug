@@ -1,0 +1,87 @@
+extends ../layout
+
+mixin positionOption(value, content)
+  - const isPlaceholder = !value;
+  - const selectedValue = selectedPosition || '';
+  - const isSelected = value === selectedValue;
+  option(value=value, disabled=isPlaceholder, selected=isSelected)= content
+
+block content
+  h1= title
+  form.form(action='', method='post')
+    .form-entry
+      label(for='first-name') First name
+      input#first-name(
+        type='text',
+        name='firstName',
+        placeholder='Jimmy',
+        value=firstName
+      )
+    .form-entry
+      label(for='last-name') Last name
+      input#last-name(
+        type='text',
+        name='lastName',
+        placeholder='Butler',
+        value=lastName
+      )
+    .form-entry
+      label(for='team') Team
+      select#team(name='team')
+        option(value='', selected=!selectedTeam) Free agent
+        each team in teams
+          - const isSelected = team.id === selectedTeam;
+          option(value=team.id, selected=isSelected)= team.name
+    .form-entry
+      label(for='number') Number
+      input#number(
+        type='number',
+        name='number',
+        placeholder='22',
+        value=number
+      )
+    .form-entry
+      label(for='position') Position
+      select#position(name='position')
+        +positionOption('', 'Choose a position')
+        +positionOption('PG', 'Point Guard')
+        +positionOption('SG', 'Shooting Guard')
+        +positionOption('SF', 'Small Forward')
+        +positionOption('PF', 'Power Forward')
+        +positionOption('C', 'Center')
+    .form-entry
+      label(for='height') Height [cm]
+      input#height(
+        type='number',
+        name='height',
+        placeholder='201',
+        value=height
+      )
+    .form-entry
+      label(for='weight') Weight [kg]
+      input#weight(
+        type='number',
+        name='weight',
+        placeholder='104',
+        value=weight
+      )
+    .form-entry
+      label(for='country') Country
+      select#country(name='country')
+        option(value='', disabled, selected=!selectedCountry) Choose a country
+        each country in countries
+          - const isSelected = country.code === selectedCountry;
+          option(value=country.code, selected=isSelected)= country.name
+    .form-entry
+      label(for='date-of-birth') Date of birth
+      input#date-of-birth(type='date', name='dateOfBirth', value=dateOfBirth)
+    .form-entry.form-buttons
+      a(href=url || '/players')
+        button(type='button') Cancel
+      button(type='submit') Submit
+  if errors
+    .errors
+      p.errors-header Errors:
+      ul
+        each error in errors
+          li !{ error.msg }.

@@ -27,7 +27,8 @@
       }
     }
 
-    input {
+    input,
+    select {
       font-size: 1.1rem;
 
       @include above-breakpoint {

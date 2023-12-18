@@ -53,7 +53,7 @@ async function createPlayers() {
       'PG',
       185,
       75,
-      'USA',
+      'US',
       new Date('1995-03-15T00:00:00Z'),
     ),
     createPlayer(
@@ -64,7 +64,7 @@ async function createPlayers() {
       'SG',
       190,
       80,
-      'Canada',
+      'CA',
       new Date('1990-07-20T00:00:00Z'),
     ),
     createPlayer(
@@ -75,7 +75,7 @@ async function createPlayers() {
       'SF',
       200,
       90,
-      'Spain',
+      'ES',
       new Date('1988-12-10T00:00:00Z'),
     ),
     createPlayer(
@@ -86,7 +86,7 @@ async function createPlayers() {
       'PF',
       197,
       85,
-      'Poland',
+      'PL',
       new Date('2000-03-31T00:00:00Z'),
     ),
     createPlayer(
@@ -97,7 +97,7 @@ async function createPlayers() {
       'C',
       210,
       100,
-      'France',
+      'FR',
       new Date('1993-09-05T00:00:00Z'),
     ),
     createPlayer(
@@ -108,7 +108,7 @@ async function createPlayers() {
       'PG',
       182,
       73,
-      'USA',
+      'US',
       new Date('1994-02-22T00:00:00Z'),
     ),
     createPlayer(
@@ -119,7 +119,7 @@ async function createPlayers() {
       'SG',
       188,
       78,
-      'Canada',
+      'CA',
       new Date('1989-06-18T00:00:00Z'),
     ),
     createPlayer(
@@ -130,7 +130,7 @@ async function createPlayers() {
       'SF',
       196,
       88,
-      'Spain',
+      'ES',
       new Date('1991-10-03T00:00:00Z'),
     ),
     createPlayer(
@@ -141,7 +141,7 @@ async function createPlayers() {
       'PF',
       197,
       84,
-      'Australia',
+      'AU',
       new Date('1993-04-15T00:00:00Z'),
     ),
     createPlayer(
@@ -152,7 +152,7 @@ async function createPlayers() {
       'C',
       208,
       102,
-      'France',
+      'FR',
       new Date('1990-12-08T00:00:00Z'),
     ),
     createPlayer(
@@ -163,7 +163,7 @@ async function createPlayers() {
       'PG',
       180,
       70,
-      'Japan',
+      'JP',
       new Date('1994-02-22T00:00:00Z'),
     ),
     createPlayer(
@@ -174,7 +174,7 @@ async function createPlayers() {
       'SG',
       185,
       75,
-      'Argentina',
+      'AR',
       new Date('1989-06-18T00:00:00Z'),
     ),
     createPlayer(
@@ -185,7 +185,7 @@ async function createPlayers() {
       'SF',
       195,
       80,
-      'Egypt',
+      'EG',
       new Date('1991-10-03T00:00:00Z'),
     ),
     createPlayer(
@@ -196,7 +196,7 @@ async function createPlayers() {
       'PF',
       200,
       90,
-      'Nigeria',
+      'NG',
       new Date('1993-04-15T00:00:00Z'),
     ),
     createPlayer(
@@ -207,7 +207,7 @@ async function createPlayers() {
       'C',
       210,
       100,
-      'Mexico',
+      'MX',
       new Date('1990-12-08T00:00:00Z'),
     ),
     createPlayer(
@@ -218,7 +218,7 @@ async function createPlayers() {
       'PG',
       185,
       75,
-      'USA',
+      'US',
       new Date('2001-10-22T00:00:00Z'),
     ),
     createPlayer(
@@ -229,7 +229,7 @@ async function createPlayers() {
       'SG',
       178,
       76,
-      'USA',
+      'US',
       new Date('2002-10-29T00:00:00Z'),
     ),
     createPlayer(
@@ -240,7 +240,7 @@ async function createPlayers() {
       'SF',
       190,
       80,
-      'Serbia',
+      'RS',
       new Date('2008-04-29T00:00:00Z'),
     ),
     createPlayer(
@@ -251,7 +251,7 @@ async function createPlayers() {
       'PF',
       192,
       93,
-      'Canada',
+      'CA',
       new Date('2013-09-17T00:00:00Z'),
     ),
     createPlayer(
@@ -262,7 +262,7 @@ async function createPlayers() {
       'C',
       195,
       100,
-      'USA',
+      'US',
       new Date('2004-10-26T00:00:00Z'),
     ),
   ]);

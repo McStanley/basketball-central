@@ -25,15 +25,19 @@ a {
 }
 
 input,
+select,
 button {
   font-family: inherit;
   border-radius: 4px;
 }
 
-input {
+input,
+select {
   padding: 4px 8px;
   border: 1px solid grey;
+}
 
+input {
   &[type='radio'] {
     margin-right: 6px;
 
@@ -41,6 +45,10 @@ input {
       font-weight: 700;
     }
   }
+}
+
+select {
+  background-color: initial;
 }
 
 button {
