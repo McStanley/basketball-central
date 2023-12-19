@@ -13,6 +13,7 @@ exports.list = asyncHandler(async (req, res, next) => {
   const players = await Player.find({})
     .select({ first_name: 1, last_name: 1, number: 1, position: 1 })
     .populate('team')
+    .collation({ locale: 'en' })
     .sort({ last_name: 1, first_name: 1 })
     .exec();
 
@@ -41,6 +42,7 @@ exports.details = asyncHandler(async (req, res, next) => {
 exports.create_GET = asyncHandler(async (req, res, next) => {
   const teams = await Team.find({})
     .select({ name: 1 })
+    .collation({ locale: 'en' })
     .sort({ name: 1 })
     .exec();
 
@@ -70,6 +72,7 @@ exports.create_POST = [
     if (!result.isEmpty()) {
       const teams = await Team.find({})
         .select({ name: 1 })
+        .collation({ locale: 'en' })
         .sort({ name: 1 })
         .exec();
 
@@ -122,6 +125,7 @@ exports.update_GET = asyncHandler(async (req, res, next) => {
 
   const teams = await Team.find({})
     .select({ name: 1 })
+    .collation({ locale: 'en' })
     .sort({ name: 1 })
     .exec();
 
@@ -174,6 +178,7 @@ exports.update_POST = [
     if (!result.isEmpty()) {
       const teams = await Team.find({})
         .select({ name: 1 })
+        .collation({ locale: 'en' })
         .sort({ name: 1 })
         .exec();
 

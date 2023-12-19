@@ -7,7 +7,10 @@ const Player = require('../models/Player');
 const checkTeam = require('../validators/checkTeam');
 
 exports.list = asyncHandler(async (req, res, next) => {
-  const teams = await Team.find({}).sort({ name: 1 }).exec();
+  const teams = await Team.find({})
+    .collation({ locale: 'en' })
+    .sort({ name: 1 })
+    .exec();
 
   res.render('teams/list', {
     title: 'Teams',
@@ -20,6 +23,7 @@ exports.details = asyncHandler(async (req, res, next) => {
     Team.findById(req.params.id).exec(),
     Player.find({ team: req.params.id })
       .select({ first_name: 1, last_name: 1, number: 1, position: 1 })
+      .collation({ locale: 'en' })
       .sort({ last_name: 1, first_name: 1 })
       .exec(),
   ]);
