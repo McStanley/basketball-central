@@ -20,7 +20,8 @@
     "luxon": "^3.4.4",
     "mongoose": "^8.0.2",
     "morgan": "~1.9.1",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "^3.0.0",
