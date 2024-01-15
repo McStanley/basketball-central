@@ -35,6 +35,21 @@ const checkTeam = asyncHandler(async (req, res, next) => {
       .bail()
       .isInt({ min: 1891, max: currentYear, allow_leading_zeroes: false })
       .withMessage(`Year must be between 1891 and ${currentYear}`),
+    body('logo').custom(() => {
+      const value = req.file;
+      const { sizeError } = res.locals;
+
+      if (value && !['image/jpeg', 'image/png'].includes(value.mimetype)) {
+        throw new Error('Logo must be JPG or PNG format');
+      }
+
+      if (sizeError) {
+        throw new Error('Logo cannot be bigger than 2 MB');
+      }
+
+      return true;
+    }),
+    body('deleteLogo').toBoolean(),
   ];
 
   await validate(validations, req);

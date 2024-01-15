@@ -1,10 +1,15 @@
 const asyncHandler = require('express-async-handler');
 const { matchedData, validationResult } = require('express-validator');
+const { getDownloadURL, getStorage } = require('firebase-admin/storage');
+
+const upload = require('../middleware/upload');
 
 const Team = require('../models/Team');
 const Player = require('../models/Player');
 
 const checkTeam = require('../validators/checkTeam');
+
+const bucket = getStorage().bucket();
 
 exports.list = asyncHandler(async (req, res, next) => {
   const teams = await Team.find({})
@@ -49,6 +54,7 @@ exports.create_GET = asyncHandler(async (req, res, next) => {
 });
 
 exports.create_POST = [
+  upload('logo'),
   checkTeam,
   asyncHandler(async (req, res, next) => {
     const result = validationResult(req);
@@ -74,6 +80,25 @@ exports.create_POST = [
       established_year: established,
     });
 
+    const { file } = req;
+
+    if (file) {
+      const extensions = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+      };
+
+      const bucketFile = bucket.file(
+        `teams/${newTeam._id}.${extensions[file.mimetype]}`,
+        {},
+      );
+
+      await bucketFile.save(file.buffer);
+
+      const downloadUrl = await getDownloadURL(bucketFile);
+      newTeam.logo = downloadUrl;
+    }
+
     await newTeam.save();
 
     res.redirect(newTeam.url);
@@ -95,11 +120,13 @@ exports.update_GET = asyncHandler(async (req, res, next) => {
     name: team.name,
     location: team.location,
     established: team.established_year,
+    logo: team.logo,
     url: team.url,
   });
 });
 
 exports.update_POST = [
+  upload('logo'),
   checkTeam,
   asyncHandler(async (req, res, next) => {
     const team = await Team.findById(req.params.id);
@@ -112,7 +139,7 @@ exports.update_POST = [
     }
 
     const result = validationResult(req);
-    const { name, location, established } = matchedData(req, {
+    const { name, location, established, deleteLogo } = matchedData(req, {
       onlyValidData: false,
     });
 
@@ -122,6 +149,7 @@ exports.update_POST = [
         name,
         location,
         established,
+        logo: team.logo,
         url: team.url,
         errors: result.array(),
       });
@@ -129,11 +157,37 @@ exports.update_POST = [
       return;
     }
 
-    await team.updateOne({
+    const teamUpdates = {
       name,
       location,
       established_year: established,
-    });
+    };
+
+    const { file } = req;
+
+    if (file || deleteLogo) {
+      await bucket.deleteFiles({ prefix: `teams/${team._id}` });
+      teamUpdates.logo = null;
+    }
+
+    if (file) {
+      const extensions = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+      };
+
+      const bucketFile = bucket.file(
+        `teams/${team._id}.${extensions[file.mimetype]}`,
+        {},
+      );
+
+      await bucketFile.save(file.buffer);
+
+      const downloadUrl = await getDownloadURL(bucketFile);
+      teamUpdates.logo = downloadUrl;
+    }
+
+    await team.updateOne(teamUpdates);
 
     res.redirect(team.url);
   }),
@@ -153,6 +207,7 @@ exports.delete_GET = asyncHandler(async (req, res, next) => {
 
   res.render('teams/delete', {
     title: `Delete ${team.name}`,
+    logo: team.logo,
     playersCount,
     url: team.url,
   });
@@ -176,6 +231,7 @@ exports.delete_POST = asyncHandler(async (req, res, next) => {
     if (!['keep', 'delete'].includes(action)) {
       res.render('teams/delete', {
         title: `Delete ${team.name}`,
+        logo: team.logo,
         playersCount,
         url: team.url,
         errors: [{ msg: 'You need to decide what to do with active players' }],
@@ -191,6 +247,7 @@ exports.delete_POST = asyncHandler(async (req, res, next) => {
     }
   }
 
+  await bucket.deleteFiles({ prefix: `teams/${team._id}` });
   await team.deleteOne();
 
   res.redirect('/teams');

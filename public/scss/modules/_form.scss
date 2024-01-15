@@ -27,7 +27,7 @@
       }
     }
 
-    input,
+    input:not([type='checkbox']),
     select {
       font-size: 1.1rem;
 

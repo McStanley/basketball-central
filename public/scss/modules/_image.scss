@@ -1,0 +1,6 @@
+.image {
+  $size-limit: 200px;
+  max-height: $size-limit;
+  max-width: $size-limit;
+  border-radius: 8px;
+}

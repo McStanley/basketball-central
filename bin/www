@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
-const app = require('../app');
 const debug = require('debug')('basketball-central:server');
+const {
+  applicationDefault,
+  initializeApp: initializeFirebase,
+} = require('firebase-admin/app');
 const http = require('http');
 const mongoose = require('mongoose');
 
@@ -15,6 +18,13 @@ require('dotenv').config();
     console.error('Failed to connect to MongoDB: ' + error.message);
   }
 })();
+
+initializeFirebase({
+  credential: applicationDefault(),
+  storageBucket: 'basketball-central.appspot.com',
+});
+
+const app = require('../app');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);

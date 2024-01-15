@@ -4,7 +4,7 @@ block content
   - const currentYear = new Date().getUTCFullYear().toString();
 
   h1= title
-  form.form(action='', method='post')
+  form.form(action='', method='post', enctype='multipart/form-data')
     .form-entry
       label(for='team-name') Name
       input#team-name(
@@ -30,6 +30,13 @@ block content
         max=currentYear,
         value=established || currentYear
       )
+    .form-entry
+      label(for='team-logo')= logo ? 'Update logo' : 'Logo'
+      input#team-logo(type='file', name='logo', accept='image/jpeg, image/png')
+    if logo
+      .form-entry
+        label(for='team-delete-logo') Delete logo
+        input#team-delete-logo(type='checkbox', name='deleteLogo')
     .form-entry.form-buttons
       a(href=url || '/teams')
         button(type='button') Cancel
@@ -40,3 +47,11 @@ block content
       ul
         each error in errors
           li !{ error.msg }.
+  if logo
+    script.
+      const deleteLogoEl = document.querySelector('#team-delete-logo');
+      const logoEl = document.querySelector('#team-logo');
+
+      deleteLogoEl.addEventListener('change', (e) => {
+        logoEl.disabled = e.target.checked;
+      });

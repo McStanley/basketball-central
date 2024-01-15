@@ -7,6 +7,8 @@ block content
     a(href=`${team.url}/delete`) Delete
   p #[b Location:] #{ team.location }
   p #[b Established:] #{ team.established_year }
+  if team.logo
+    img.image(src=team.logo, alt='Team logo')
   h2 Players
   ul.entry-list
     each player in players

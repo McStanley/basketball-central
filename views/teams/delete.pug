@@ -9,6 +9,8 @@ mixin buttons
 block content
   h1= title
   p Are you sure you want to delete this team?
+  if logo
+    img.image(src=logo, alt='Team logo')
   if playersCount > 0
     form.form(action='', method='post')
       h2 Warning
