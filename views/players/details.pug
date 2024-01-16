@@ -12,7 +12,9 @@ block content
       a.omit-before(href=player.team.url) #{ player.team.name }
     else
       | Free Agent
-  h3(style='margin-top: 50px') Player information:
+  if player.photo
+    img.image(src=player.photo, alt=player.full_name)
+  h3(style='margin-top: 25px') Player information:
   p #[b Position:] #{ player.position_name }
   p #[b Height:] #{ player.height } cm
   p #[b Weight:] #{ player.weight } kg

@@ -243,6 +243,14 @@ exports.delete_POST = asyncHandler(async (req, res, next) => {
     if (action === 'keep') {
       await Player.updateMany({ team: team._id }, { team: null });
     } else {
+      const players = await Player.find({ team: team._id })
+        .select({ _id: 1 })
+        .exec();
+
+      for (const player of players) {
+        await bucket.deleteFiles({ prefix: `players/${player._id}` });
+      }
+
       await Player.deleteMany({ team: team._id });
     }
   }

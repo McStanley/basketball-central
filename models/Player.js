@@ -18,6 +18,7 @@ const PlayerSchema = new Schema({
   weight: { type: Number, required: true },
   country: { type: String, required: true },
   date_of_birth: { type: Date, required: true },
+  photo: { type: String },
 });
 
 PlayerSchema.virtual('full_name').get(function getFullName() {

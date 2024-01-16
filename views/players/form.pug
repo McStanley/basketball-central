@@ -8,7 +8,7 @@ mixin positionOption(value, content)
 
 block content
   h1= title
-  form.form(action='', method='post')
+  form.form(action='', method='post', enctype='multipart/form-data')
     .form-entry
       label(for='first-name') First name
       input#first-name(
@@ -75,6 +75,13 @@ block content
     .form-entry
       label(for='date-of-birth') Date of birth
       input#date-of-birth(type='date', name='dateOfBirth', value=dateOfBirth)
+    .form-entry
+      label(for='photo')= photo ? 'Update photo' : 'Photo'
+      input#photo(type='file', name='photo', accept='image/jpeg, image/png')
+    if photo
+      .form-entry
+        label(for='delete-photo') Delete photo
+        input#delete-photo(type='checkbox', name='deletePhoto')
     .form-entry.form-buttons
       a(href=url || '/players')
         button(type='button') Cancel
@@ -85,3 +92,11 @@ block content
       ul
         each error in errors
           li !{ error.msg }.
+  if photo
+    script.
+      const deletePhotoEl = document.querySelector('#delete-photo');
+      const photoEl = document.querySelector('#photo');
+
+      deletePhotoEl.addEventListener('change', (e) => {
+        photoEl.disabled = e.target.checked;
+      });

@@ -1,6 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const { matchedData, validationResult } = require('express-validator');
 const luxon = require('luxon');
+const { getDownloadURL, getStorage } = require('firebase-admin/storage');
+
+const upload = require('../middleware/upload');
 
 const Player = require('../models/Player');
 const Team = require('../models/Team');
@@ -8,6 +11,8 @@ const Team = require('../models/Team');
 const checkPlayer = require('../validators/checkPlayer');
 
 const countries = require('../data/countries.json');
+
+const bucket = getStorage().bucket();
 
 exports.list = asyncHandler(async (req, res, next) => {
   const players = await Player.find({})
@@ -54,6 +59,7 @@ exports.create_GET = asyncHandler(async (req, res, next) => {
 });
 
 exports.create_POST = [
+  upload('photo'),
   checkPlayer,
   asyncHandler(async (req, res, next) => {
     const result = validationResult(req);
@@ -107,6 +113,25 @@ exports.create_POST = [
       date_of_birth: dateOfBirth,
     });
 
+    const { file } = req;
+
+    if (file) {
+      const extensions = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+      };
+
+      const bucketFile = bucket.file(
+        `players/${newPlayer._id}.${extensions[file.mimetype]}`,
+        {},
+      );
+
+      await bucketFile.save(file.buffer);
+
+      const downloadUrl = await getDownloadURL(bucketFile);
+      newPlayer.photo = downloadUrl;
+    }
+
     await newPlayer.save();
 
     res.redirect(newPlayer.url);
@@ -146,11 +171,13 @@ exports.update_GET = asyncHandler(async (req, res, next) => {
     countries,
     selectedCountry: player.country,
     dateOfBirth,
+    photo: player.photo,
     url: player.url,
   });
 });
 
 exports.update_POST = [
+  upload('photo'),
   checkPlayer,
   asyncHandler(async (req, res, next) => {
     const player = await Player.findById(req.params.id);
@@ -173,6 +200,7 @@ exports.update_POST = [
       weight,
       country,
       dateOfBirth,
+      deletePhoto,
     } = matchedData(req, { onlyValidData: false });
 
     if (!result.isEmpty()) {
@@ -195,13 +223,14 @@ exports.update_POST = [
         countries,
         selectedCountry: country,
         dateOfBirth,
+        photo: player.photo,
         errors: result.array(),
       });
 
       return;
     }
 
-    await player.updateOne({
+    const playerUpdates = {
       first_name: firstName,
       last_name: lastName,
       team,
@@ -211,7 +240,33 @@ exports.update_POST = [
       weight,
       country,
       date_of_birth: dateOfBirth,
-    });
+    };
+
+    const { file } = req;
+
+    if (file || deletePhoto) {
+      await bucket.deleteFiles({ prefix: `players/${player._id}` });
+      playerUpdates.photo = null;
+    }
+
+    if (file) {
+      const extensions = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+      };
+
+      const bucketFile = bucket.file(
+        `players/${player._id}.${extensions[file.mimetype]}`,
+        {},
+      );
+
+      await bucketFile.save(file.buffer);
+
+      const downloadUrl = await getDownloadURL(bucketFile);
+      playerUpdates.photo = downloadUrl;
+    }
+
+    await player.updateOne(playerUpdates);
 
     res.redirect(player.url);
   }),
@@ -229,6 +284,8 @@ exports.delete_GET = asyncHandler(async (req, res, next) => {
 
   res.render('players/delete', {
     title: `Delete ${player.full_name}`,
+    photo: player.photo,
+    fullName: player.full_name,
     url: player.url,
   });
 });
@@ -243,6 +300,7 @@ exports.delete_POST = asyncHandler(async (req, res, next) => {
     return;
   }
 
+  await bucket.deleteFiles({ prefix: `players/${player._id}` });
   await player.deleteOne();
 
   res.redirect('/players');

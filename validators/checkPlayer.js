@@ -111,6 +111,21 @@ const checkPlayer = asyncHandler(async (req, res, next) => {
       .withMessage('Player cannot be older than 100')
       .isBefore(maxDate)
       .withMessage('Player must be at least 10 years old'),
+    body('photo').custom(() => {
+      const value = req.file;
+      const { sizeError } = res.locals;
+
+      if (value && !['image/jpeg', 'image/png'].includes(value.mimetype)) {
+        throw new Error('Photo must be JPG or PNG format');
+      }
+
+      if (sizeError) {
+        throw new Error('Photo cannot be bigger than 2 MB');
+      }
+
+      return true;
+    }),
+    body('deletePhoto').toBoolean(),
   ];
 
   await validate(validations, req);

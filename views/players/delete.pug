@@ -2,6 +2,8 @@ extends ../layout
 
 block content
   h1= title
+  if photo
+    img.image(src=photo, alt=fullName)
   p Are you sure you want to delete this player?
   form.form(action='', method='post')
     .form-entry.form-buttons
